@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: psql
+  namespace: fastapi
+spec:
+  selector:
+    matchLabels:
+      app: psql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: psql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: psql
+        image: postgres:15.6
+        imagePullPolicy: IfNotPresent
+
+        envFrom:
+        - configMapRef:
+            name: configmap-psql
+
+        ports:
+        - containerPort: 5432
+          name: psql
+
+
+
+
+   
+ 
