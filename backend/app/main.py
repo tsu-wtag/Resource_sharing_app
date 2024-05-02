@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
-from config import conn 
+from config import conn
 import psycopg2
 from schema import User, Resources
 from models import users, resources
