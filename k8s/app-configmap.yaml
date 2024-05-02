@@ -5,7 +5,7 @@ metadata:
   namespace: fastapi
 data:
   DB_NAME: fastapi
-  DB_USER: postgresql
+  DB_USER: postgres
   DB_PASSWORD: "123"
   DB_HOST: db-service
   DB_PORT: "5432"

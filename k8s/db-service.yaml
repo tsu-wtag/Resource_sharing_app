@@ -5,7 +5,7 @@ metadata:
   namespace: fastapi
 spec:
   selector:
-    app: fastapi
+    app: psql
   ports:
     - protocol: TCP
       port: 5432

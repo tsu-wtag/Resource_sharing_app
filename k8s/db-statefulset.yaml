@@ -4,30 +4,41 @@ metadata:
   name: psql
   namespace: fastapi
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: psql
-  replicas: 1
   template:
     metadata:
       labels:
         app: psql
     spec:
-      terminationGracePeriodSeconds: 10
+      # terminationGracePeriodSeconds: 10
       containers:
-      - name: psql
-        image: postgres:15.6
-        imagePullPolicy: IfNotPresent
+        - name: psql
+          image: postgres:15.6
+          imagePullPolicy: IfNotPresent
 
-        envFrom:
-        - configMapRef:
-            name: configmap-psql
+          envFrom:
+          - configMapRef:
+              name: db-configmap
 
-        ports:
-        - containerPort: 5432
-          name: psql
-
-
+          #  ports:
+          #  - containerPort: 5432
+      
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: psql
+              mountPath: /var/lib/postgresql/data 
+  volumeClaimTemplates:
+    - metadata:
+        name: psql
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 
 
    

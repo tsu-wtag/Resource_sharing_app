@@ -23,5 +23,5 @@ spec:
         - containerPort: 8000
         envFrom:
         - configMapRef:
-            name: configmap-app
+            name: app-configmap
       
