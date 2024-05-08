@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/backend/app
           IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/backend-app:${{ github.sha }}"
           docker build -t $IMAGE_TAG .
 
