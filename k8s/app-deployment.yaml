@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: fastapi
-        image: tajmin/backend-app:v2.0
+        image: tajmin/backend-app:v3.0
         ports:
         - containerPort: 8000
         envFrom:

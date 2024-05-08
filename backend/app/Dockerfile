@@ -4,12 +4,13 @@ FROM python:latest
 #working dir
 WORKDIR /code
 
+RUN apt-get update && \
+     apt-get install -y netcat-openbsd
 # Install dependencies
 COPY requirements.txt .
 
 # Install netcat
-RUN apt-get update && \
-     apt-get install -y netcat-openbsd
+
 
 
 RUN pip install  -r requirements.txt

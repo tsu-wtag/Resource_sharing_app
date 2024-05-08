@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: backend-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: chart-backend
+  template:
+    metadata:
+      labels: 
+        component: chart-backend
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.app.image }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_HOST
+              value: {{ .Values.app.dbhost }}
+            - name: DB_PORT
+              value:  {{ quote .Values.app.dbport }}
+            - name: DB_NAME
+              value: {{ .Values.app.dbname }}
+            - name: DB_USER
+              value: {{ .Values.app.dbuser }}
+            - name: POSTGRES_PASSWORD
+              value: {{ quote .Values.app.password }}

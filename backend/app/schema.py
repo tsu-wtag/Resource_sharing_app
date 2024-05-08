@@ -1,6 +1,6 @@
 from pydantic import BaseModel,EmailStr
 from datetime import datetime
-from typing import Optional
+
 
 class User(BaseModel):
     username: str
@@ -31,3 +31,11 @@ class Resource_details(BaseModel):
     resource_link: str
     created_at: datetime
 
+class UserDict(BaseModel):
+    user_id: int
+    username: str
+    email: EmailStr
+    password: str
+
+class TokenData(BaseModel):
+    username: str | None = None

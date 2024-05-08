@@ -1,0 +1,72 @@
+# image:
+#   backendRepository: tajmin/backend-app
+#   tag: v2.0
+
+# replicas: 1
+# namespace: fastapi
+# name: fastapi
+
+# app:
+#   image: tajmin/backend-app:v3.0
+#   dbname: fastapi
+#   dbuser: postgres
+#   dbPassword: "123"
+#   dbPort: "5432"
+#   port: 8000
+
+# db:
+#   name: fastapi
+#   image: postgres:15.6
+#   port: 5432
+#   dbhost: postgres
+#   postgresDb: fastapi
+#   postgresUser: postgres
+#   postgresPassword: "123"
+#   #sql: CREATE DATABASE IF NOT EXISTS fastapi;
+
+# storage:
+#   size: 1Gi
+
+# sts:
+#   name: postgresql
+#   servicename: postgresql
+#   imagename: postgresql
+#   mountpath: /var/lib/postgresql/data
+
+
+
+# Default values for backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+namespace: fastapi
+name: backend-app
+
+sts:
+  name: postgresql
+  servicename: postgresql
+  imagename: postgresql
+  mountpath: /var/lib/postgresql/data
+
+
+db:
+  image: postgres:15.6
+  dbhost: postgres
+  user: postgres
+  password: '123'
+  name: fastapi
+  port: '5432'
+  # sql: CREATE DATABASE IF NOT EXISTS fastapi;
+
+
+app:
+  image: tajmin/backend-app:v3.0
+  dbhost: postgres
+  dbport: '5432'
+  dbname: fastapi
+  dbuser: postgres
+  password: '123'
+
+storage:
+  size: 1Gi

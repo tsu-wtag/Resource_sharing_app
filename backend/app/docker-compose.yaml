@@ -14,7 +14,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_USER=postgres
-      - DB_PASSWORD=123
+      - POSTGRES_PASSWORD=123
       - DB_NAME=fastapi
       - SECRET_KEY = 7caed3dfc8ed0335575bf68010c01f3da141b249c73c26115c17456e017c0325
       - ALGORITHM = "HS256"
@@ -25,7 +25,7 @@ services:
     image: postgres:15.6
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
+      POSTGRES_PASSWORD: '123'
       POSTGRES_DB: fastapi
     ports:
       - "5433:5432"

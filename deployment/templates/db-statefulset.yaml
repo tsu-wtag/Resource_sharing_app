@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.sts.name}}
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: {{ .Values.sts.servicename }}
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      containers:
+      - name: {{ .Values.sts.imagename }}
+        image: {{ .Values.db.image }}
+        ports:
+        - containerPort: {{ .Values.app.dbport }}
+        envFrom:
+          - configMapRef:
+              name: backend-app
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: {{ .Values.sts.mountpath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql-data
+      namespace: {{ .Values.namespace }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: hostpath
+      resources:
+        requests:
+          storage: {{ .Values.storage.size }}
