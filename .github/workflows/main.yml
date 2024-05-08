@@ -4,7 +4,7 @@ name: ci-for-uploading-new-image-in-docker-hub
 on:
   push:
     branches:
-      - main
+      - main/branch
 
 jobs:
   build-and-push:
