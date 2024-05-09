@@ -1,4 +1,4 @@
-name: upload-image-in-docker-hub
+name: create-image-in-docker-hub
 
 
 on:
@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Get the short SHA
-        run: echo ::set-output name=SHA_SHORT::$(echo ${GITHUB_SHA::7})
+        run: echo ::set-output name=SHA_SHORT::$(echo ${GITHUB_SHA::8})
 
       - name: Build Docker image
         run: |
