@@ -1,4 +1,4 @@
-name: ci-for-uploading-new-image-in-docker-hub
+name: upload-image-in-docker-hub
 
 
 on:
