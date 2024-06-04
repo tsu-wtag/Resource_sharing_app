@@ -1,25 +1,52 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi import HTTPException
 from config import conn
 import psycopg2
 from schema import User, Resources
 from models import users, resources
 from routes.login import log 
-from routes.resources import res
+# from routes.resources import res
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST, start_http_server
+from starlette.middleware import Middleware
+from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 
-cursor = conn.cursor()
 app = FastAPI()
+
+REQUESTS_COUNT = Counter('app_requests_total', 'Total App Request',['app_name', 'endpoint'])
+REQUESTS = Counter('http_requests_total', 'Total HTTP Requests')
+METRICS_PORT = 8002
+
+app.add_middleware(PrometheusMiddleware)
+# Start the HTTP server when the application starts up
+start_http_server(METRICS_PORT)
+
+@app.get("/")
+async def root():
+    REQUESTS_COUNT.labels('Learning Resource Sharing Application Call', '/').inc()
+    REQUESTS.inc()
+    return {"message": "Hello World, Its working!"}
+
+@app.get("/metrics")
+async def metrics():
+    metrics_data = generate_latest()
+    return Response(content=metrics_data, media_type=CONTENT_TYPE_LATEST)
+
+
+
+##########-------------------------------------
+cursor = conn.cursor()
+
 
 #app.include_router(res)
 app.include_router(log)
 
 
-@app.get("/")
-def posts():
-    cursor.execute(users)
-    conn.commit()
-    return {"message": "this is working"}
+# @app.get("/")
+# def posts():
+#     cursor.execute(users)
+#     conn.commit()
+#     return {"message": "this is working"}
 
 
 #CRUD operation
@@ -95,6 +122,11 @@ def read_user(user_id: int):
 #     # finally:
 #     #     cursor.close()
 #     #     conn.close()
+
+############---------------------------------------------------------------------------------
+
+
+
 
 
 if __name__ == "__main__":

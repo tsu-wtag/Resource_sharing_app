@@ -11,8 +11,6 @@ COPY requirements.txt .
 
 # Install netcat
 
-
-
 RUN pip install  -r requirements.txt
 
 # Copy entire project directory to working directory
