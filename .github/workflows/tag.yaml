@@ -26,11 +26,11 @@ jobs:
           fi
         shell: bash
 
-      # - name: Set Git Config
-      #   run: |
-      #     git config --global user.email "${{ secrets.USER_EMAIL }}"
-      #     git config --global user.name "${{ secrets.USER_NAME }}"
-      #   shell: bash
+      - name: Set Git Config
+        run: |
+          git config --global user.email "${{ secrets.USER_EMAIL }}"
+          git config --global user.name "${{ secrets.USER_NAME }}"
+        shell: bash
 
       - name: Generate Release Tag
         run: |
@@ -40,3 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
+
+
+
+
+# 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
