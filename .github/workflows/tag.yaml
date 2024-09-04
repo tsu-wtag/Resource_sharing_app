@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
         with:
           tag_name: ${{ github.run_number }}  # The name of the tag to create a release for
-          release_name: V ${{ github.run_number }}  # Title of the release
+          release_name: V${{ github.run_number }}-stage  # Title of the release
           draft: false
           prerelease: false
 
