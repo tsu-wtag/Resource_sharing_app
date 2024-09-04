@@ -1,6 +1,9 @@
 name: Create and Release Tag
 
 on:
+  push:
+    branches:
+      - 'main/branch'  # Replace 'main' with your actual default branch name if it's different
   workflow_dispatch:
     inputs:
       release-tag-number:
@@ -13,7 +16,7 @@ jobs:
     permissions:
       contents: write
       deployments: write
-      
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,6 +25,6 @@ jobs:
         uses: ./
         with:
           release-tag-number: ${{ github.event.inputs.release-tag-number }}
-          user-email: ${{ secrets.USER_EMAIL }}
-          user-name: ${{ secrets.USER_NAME }}
-          github-token: ${{ secrets.TOKEN }}
+          # user-email: ${{ secrets.USER_EMAIL }}
+          # user-name: ${{ secrets.USER_NAME }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

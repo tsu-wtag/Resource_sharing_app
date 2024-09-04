@@ -31,11 +31,11 @@ runs:
       fi
     shell: bash
 
-  - name: Set Git Config
-    run: |
-      git config --global user.email "${{ inputs.user-email }}"
-      git config --global user.name "${{ inputs.user-name }}"
-    shell: bash
+  # - name: Set Git Config
+  #   run: |
+  #     git config --global user.email "${{ inputs.user-email }}"
+  #     git config --global user.name "${{ inputs.user-name }}"
+  #   shell: bash
 
   - name: Update Tag
     run: |
