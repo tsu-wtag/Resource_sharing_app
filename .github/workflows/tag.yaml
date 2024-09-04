@@ -58,8 +58,6 @@ jobs:
           draft: false
           prerelease: false
 
-runs:
-  using: 'node16'
-  main: 'github-action-runtime/index.js'
+
 
 ##faltu
