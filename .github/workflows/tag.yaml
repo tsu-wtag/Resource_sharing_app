@@ -34,30 +34,24 @@ name: Create Release
 
 on:
   push:
-    branches:
-      - 'main/branch'
     tags:
-      - 'v*'  # Trigger the workflow on tag pushes that start with 'v'
-
-permissions:
-  contents: write  # Required to create releases
+      - 'v*'  # Trigger workflow on tag pushes that start with 'v'
 
 jobs:
-  release:
-    name: Release pushed tag
+  create-release:
+    name: Create Release for Tags
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
-
-      - name: Authenticate GitHub CLI
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Create release
-   
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+        with:
+          tag_name: ${{ github.ref_name }}  # The name of the tag to create a release for
+          release_name: Release ${{ github.ref_name }}  # Title of the release
+          draft: false
+          prerelease: false
