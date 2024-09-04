@@ -34,6 +34,8 @@ name: Create Release
 
 on:
   push:
+    branches:
+      - 'main/branch'
     tags:
       - 'v*'  # Trigger workflow on tag pushes that start with 'v'
 
