@@ -35,30 +35,30 @@ name: Create and Release Tag
 on:
   push:
     branches:
-      - 'main/branch' 
+      - 'main/branch'  # Trigger for pushes to 'main/branch'
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-
-name: Create Release
+      - 'v*'  # Trigger for pushes to tags matching 'v*'
 
 jobs:
-  build:
+  create-release:
     name: Create Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Token for creating release
         with:
-          tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
-          # body: |
-          #   Changes in this Release
-          #   - First Change
-          #   - Second Change
-          # draft: false
-          # prerelease: false
+          tag_name: ${{ github.ref_name }}  # Use github.ref_name for tag names
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
