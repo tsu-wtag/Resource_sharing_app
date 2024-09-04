@@ -23,10 +23,10 @@ runs:
   - name: Checkout Repository
     uses: actions/checkout@v4
 
-  - name: Exit if the branch is not main
+  - name: Exit if the branch is not main/branch
     run: |
       if [[ "${{ github.ref }}" != "refs/heads/main/branch" ]]; then
-        echo "Branch is not main, exiting."
+        echo "Branch is not main/branch, exiting."
         exit 1
       fi
     shell: bash
