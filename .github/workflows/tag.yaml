@@ -25,6 +25,6 @@ jobs:
         uses: ./
         with:
           release-tag-number: ${{ github.event.inputs.release-tag-number }}
-          # user-email: ${{ secrets.USER_EMAIL }}
-          # user-name: ${{ secrets.USER_NAME }}
+          user-email: ${{ secrets.USER_EMAIL }}
+          user-name: ${{ secrets.USER_NAME }}
           github-token: ${{ secrets.TOKEN }}

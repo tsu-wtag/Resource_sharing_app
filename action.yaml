@@ -7,12 +7,12 @@ inputs:
     description: 'Enter the release-tag number'
     required: true
     default: 'v1'
-  # user-email:
-  #   description: 'Email for Git configuration'
-  #   required: true
-  # user-name:
-  #   description: 'Name for Git configuration'
-  #   required: true
+  user-email:
+    description: 'Email for Git configuration'
+    required: true
+  user-name:
+    description: 'Name for Git configuration'
+    required: true
   github-token:
     description: 'GitHub Token'
     required: true
@@ -31,11 +31,11 @@ runs:
   #     fi
   #   shell: bash
 
-  # - name: Set Git Config
-  #   run: |
-  #     git config --global user.email "${{ inputs.user-email }}"
-  #     git config --global user.name "${{ inputs.user-name }}"
-  #   shell: bash
+  - name: Set Git Config
+    run: |
+      git config --global user.email "${{ inputs.user-email }}"
+      git config --global user.name "${{ inputs.user-name }}"
+    shell: bash
 
   - name: Update Tag
     run: |
