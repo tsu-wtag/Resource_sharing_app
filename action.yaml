@@ -1,47 +1,47 @@
-# name: Generate Release Tag
+name: Generate Release Tag
 
-# description: Create a new tag.
+description: Create a new tag.
 
-# inputs:
-#   release-tag-number:
-#     description: 'Enter the release-tag number'
-#     required: true
-#     default: 'v1'
-#   user-email:
-#     description: 'Email for Git configuration'
-#     required: true
-#   user-name:
-#     description: 'Name for Git configuration'
-#     required: true
-#   github-token:
-#     description: 'GitHub Token'
-#     required: true
+inputs:
+  release-tag-number:
+    description: 'Enter the release-tag number'
+    required: true
+    default: 'v1'
+  user-email:
+    description: 'Email for Git configuration'
+    required: true
+  user-name:
+    description: 'Name for Git configuration'
+    required: true
+  github-token:
+    description: 'GitHub Token'
+    required: true
 
-# runs:
-#   using: "composite"
-#   steps:
-#   - name: Checkout Repository
-#     uses: actions/checkout@v4
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v4
 
-#   # - name: Exit if the branch is not main/branch
-#   #   run: |
-#   #     if [[ "${{ github.ref }}" != "refs/heads/main/branch" ]]; then
-#   #       echo "Branch is not main/branch, exiting."
-#   #       exit 1
-#   #     fi
-#   #   shell: bash
+  # - name: Exit if the branch is not main/branch
+  #   run: |
+  #     if [[ "${{ github.ref }}" != "refs/heads/main/branch" ]]; then
+  #       echo "Branch is not main/branch, exiting."
+  #       exit 1
+  #     fi
+  #   shell: bash
 
-#   - name: Set Git Config
-#     run: |
-#       git config --global user.email "${{ inputs.user-email }}"
-#       git config --global user.name "${{ inputs.user-name }}"
-#     shell: bash
+  - name: Set Git Config
+    run: |
+      git config --global user.email "${{ inputs.user-email }}"
+      git config --global user.name "${{ inputs.user-name }}"
+    shell: bash
 
-#   - name: Update Tag
-#     run: |
-#       echo "The input value is: ${{ inputs.release-tag-number }}"
-#       git tag -a ${{ inputs.release-tag-number }} -m "Updating tags"
-#       git push origin ${{ inputs.release-tag-number }}
-#     env:
-#       GITHUB_TOKEN: ${{ inputs.github-token }}
-#     shell: bash
+  - name: Update Tag
+    run: |
+      echo "The input value is: ${{ inputs.release-tag-number }}"
+      git tag -a ${{ inputs.release-tag-number }} -m "Updating tags"
+      git push origin ${{ inputs.release-tag-number }}
+    env:
+      GITHUB_TOKEN: ${{ inputs.github-token }}
+    shell: bash

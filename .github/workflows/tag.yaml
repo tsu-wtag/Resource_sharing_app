@@ -1,61 +1,61 @@
-# name: Create and Release Tag
-
-# on:
-#   push:
-#     branches:
-#       - 'main/branch'  
-#   workflow_dispatch:
-#     inputs:
-#       release-tag-number:
-#         description: 'Enter the release-tag number'
-#         required: true
-
-# jobs:
-#   create-tag:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: write
-#       deployments: write
-
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v4
-
-#       - name: Generate Release Tag
-#         uses: ./
-#         with:
-#           release-tag-number: ${{ github.event.inputs.release-tag-number }}
-#           user-email: ${{ secrets.USER_EMAIL }}
-#           user-name: ${{ secrets.USER_NAME }}
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-
-name: Create Release
+name: Create and Release Tag
 
 on:
   push:
     branches:
-      - 'main/branch'
-    tags:
-      - 'v*'  # Trigger workflow on tag pushes that start with 'v'
+      - 'main/branch'  
+  workflow_dispatch:
+    inputs:
+      release-tag-number:
+        description: 'Enter the release-tag number'
+        required: true
 
 jobs:
-  create-release:
-    name: Create Release for Tags
+  create-tag:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    permissions:
+      contents: write
+      deployments: write
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Release Tag
+        uses: ./
         with:
-          tag_name: ${{ github.ref_name }}  # The name of the tag to create a release for
-          release_name: Release ${{ github.ref_name }}  # Title of the release
-          draft: false
-          prerelease: false
+          release-tag-number: ${{ github.event.inputs.release-tag-number }}
+          user-email: ${{ secrets.USER_EMAIL }}
+          user-name: ${{ secrets.USER_NAME }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+# name: Create Release
+
+# on:
+#   push:
+#     branches:
+#       - 'main/branch'
+#     tags:
+#       - 'v*'  # Trigger workflow on tag pushes that start with 'v'
+
+# jobs:
+#   create-release:
+#     name: Create Release for Tags
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+#         with:
+#           tag_name: ${{ github.ref_name }}  # The name of the tag to create a release for
+#           release_name: Release ${{ github.ref_name }}  # Title of the release
+#           draft: false
+#           prerelease: false
 
 ####okk??
