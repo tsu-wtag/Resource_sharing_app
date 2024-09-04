@@ -3,7 +3,7 @@ name: Create and Release Tag
 on:
   push:
     branches:
-      - 'main/branch'  # Replace 'main' with your actual default branch name if it's different
+      - 'main/branch'  
   workflow_dispatch:
     inputs:
       release-tag-number:
@@ -27,4 +27,4 @@ jobs:
           release-tag-number: ${{ github.event.inputs.release-tag-number }}
           # user-email: ${{ secrets.USER_EMAIL }}
           # user-name: ${{ secrets.USER_NAME }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}

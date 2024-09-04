@@ -41,7 +41,7 @@ runs:
     run: |
       echo "The input value is: ${{ inputs.release-tag-number }}"
       git tag -a ${{ inputs.release-tag-number }} -m "Updating tags"
-      git push origin ${{ inputs.release-tag-number }}-stag
+      git push origin ${{ inputs.release-tag-number }}
     env:
       GITHUB_TOKEN: ${{ inputs.github-token }}
     shell: bash
