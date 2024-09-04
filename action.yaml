@@ -25,7 +25,7 @@ runs:
 
   - name: Exit if the branch is not main
     run: |
-      if [[ "${{ github.ref }}" != "refs/heads/main" ]]; then
+      if [[ "${{ github.ref }}" != "refs/heads/main/branch" ]]; then
         echo "Branch is not main, exiting."
         exit 1
       fi
