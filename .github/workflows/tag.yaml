@@ -1,51 +1,41 @@
-# name: Create and Release Tag
-
-# on:
-#   push:
-#     branches:
-#       - 'main'  
-#   workflow_dispatch:
-#     inputs:
-#       release-tag-number:
-#         description: 'Enter the release-tag number'
-#         required: true
-
-# jobs:
-#   create-tag:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: write
-#       deployments: write
-
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v4
-
-#       - name: Generate Release Tag
-#         uses: ./
-#         with:
-#           release-tag-number: ${{ github.event.inputs.release-tag-number }}
-#           user-email: ${{ secrets.USER_EMAIL }}
-#           user-name: ${{ secrets.USER_NAME }}
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-
-name: Create Release
+name: Create Release for Staging
 
 on:
   push:
     branches:
-      - 'master'
-    tags:
-      - 'v*'  # Trigger workflow on tag pushes that start with 'v'
+      - 'develop'
 
 jobs:
   create-release:
+    if: ${{ github.event.pull_request.merged == true }}
     name: Create Release for Tags
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Fetch Tags
+        run: git fetch --tags
+
+      - name: Get Latest Tag
+        id: get_latest_tag
+        run: |
+          # Get the latest tag that starts with "v"
+          latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
+          echo "Latest tag: $latest_tag"
+          
+          # If no tag is found, set the initial version to v1
+          if [ -z "$latest_tag" ]; then
+            new_tag="v1"
+          else
+            # Extract the numeric part of the tag and increment it
+            tag_number=${latest_tag//[!0-9]/} # Remove non-numeric characters
+            new_number=$((tag_number + 1))
+            new_tag="v$new_number"
+          fi
+          echo "New tag: $new_tag"
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -53,11 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
         with:
-          tag_name: ${{ github.run_number }}  # The name of the tag to create a release for
-          release_name: V${{ github.run_number }}-stage  # Title of the release
+          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+          release_name: ${{ env.new_tag }}-stage  # Title of the release
           draft: false
           prerelease: false
-
-
-
-##faltu
