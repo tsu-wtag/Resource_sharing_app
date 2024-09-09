@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - 'master'
-env:
-  GKE_CLUSTER: staging-v3
-  GKE_PROJECT: nodal-algebra-161404
-  GKE_ZONE: us-west1-a
-  IMAGE_NAME: demo-project
 
 jobs:
   build-and-push-images:
@@ -22,10 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build and Push Backend Docker Image
-        run: |
-          cd ./backend
-          docker build -f Dockerfile -t eu.gcr.io/${env.GKE_PROJECT}/${env.IMAGE_NAME}:latest .
+      - name: 'gcr.io/cloud-builders/docker'
+        run: docker build -t gcr.io/nodal-algebra-161404/test ./backend/app
+
 
       - name: Confirm Image Builds and Pushes
         run: echo "All Docker images have been built and pushed successfully."
