@@ -75,3 +75,42 @@
 
 #       - name: Confirm Image Builds and Pushes
 #         run: echo "All Docker images have been built and pushed successfully."
+
+
+
+
+
+
+
+
+------------------------------
+# name: Create Release for Production
+
+# on:
+#   push:
+#     branches:
+#       - 'main'
+#     tags:
+#       - 'v*'  # Trigger workflow on tag pushes that start with 'v'
+
+# jobs:
+#   create-release:
+#     if: ${{ github.event.pull_request.merged == true }}
+#     name: Create Release for Tags
+#     runs-on: self-hosted
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+#         with:
+#           tag_name: ${{ github.run_number }}  # number of the release
+#           release_name: v${{ github.run_number }}-prod  # Title of the release
+#           draft: false
+#           prerelease: false
+
+

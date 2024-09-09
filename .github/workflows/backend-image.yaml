@@ -12,40 +12,22 @@ jobs:
 
     env:
       IMAGE_TAG: ${{ github.ref }}
-      GH_PACKAGES_ACCESS_TOKEN: ${{ secrets.GH_PACKAGES_ACCESS_TOKEN }}
-      GH_PACKAGES_ACCESS_TOKEN_RW: ${{ secrets.GH_PACKAGES_ACCESS_TOKEN_RW }}
-      GCP_SA: ${{ secrets.GCP_SA }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0.7.3
-        with:
-          credentials_json: ${{ secrets.GKE_SERVICE_ACCOUNT }}
-
-      - name: Build and Push Frontend Docker Image
-        run: |
-          cd frontend
-          docker build -t eu.gcr.io/nodal-algebra-161404/${{ env.PROJECT_PERMALINK }}:${{ github.ref }} \
-                 -t eu.gcr.io/nodal-algebra-161404/${{ env.PROJECT_PERMALINK }}:build-cache${{ github.ref }} . \
-                 --cache-from eu.gcr.io/nodal-algebra-161404/${{ env.PROJECT_PERMALINK }}:build-cache${{ github.ref }}
-          docker push eu.gcr.io/nodal-algebra-161404/${{ env.PROJECT_PERMALINK }}:${{ github.ref }}
-          docker push eu.gcr.io/nodal-algebra-161404/${{ env.PROJECT_PERMALINK }}:build-cache${{ github.ref }}
-
       - name: Build and Push Backend Docker Image
         run: |
-          cd backend
-          docker build -t eu.gcr.io/nodal-algebra-161404/backend:${{ github.ref }} .
-          docker push eu.gcr.io/nodal-algebra-161404/backend:${{ github.ref }}
+          cd ./backend
+          docker build -f celeryworker.dockerfile -t eu.gcr.io/${GKE_PROJECT}/${IMAGE_NAME}-celeryworker:${IMAGE_TAG} .
+      #     docker push eu.gcr.io/nodal-algebra-161404/backend:${{ github.ref }}
 
-      - name: Build and Push Celery Docker Image
-        run: |
-          cd celery
-          docker build -t eu.gcr.io/nodal-algebra-161404/celery:${{ github.ref }} .
-          docker push eu.gcr.io/nodal-algebra-161404/celery:${{ github.ref }}
+      # - name: Build and Push Celery Docker Image
+      #   run: |
+      #     cd celery
+      #     docker build -t eu.gcr.io/nodal-algebra-161404/celery:${{ github.ref }} .
+      #     docker push eu.gcr.io/nodal-algebra-161404/celery:${{ github.ref }}
 
       - name: Confirm Image Builds and Pushes
         run: echo "All Docker images have been built and pushed successfully."
