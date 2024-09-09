@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-push-images:
     name: Docker Build and Push Images
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     env:
       IMAGE_TAG: ${{ github.ref }}
