@@ -53,9 +53,8 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Correct reference for authentication
         with:
+          token: ${{ secrets.PAT_TOKEN }}  # Correctly use the PAT_TOKEN here
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: ${{ env.new_tag }}  # Title of the release
           draft: false
