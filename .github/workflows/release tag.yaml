@@ -1,66 +1,28 @@
-name: Staging Release Tag
+# 
 
+
+name: Deploy action 
 on:
   push:
     branches:
       - 'master'
 
+
 jobs:
-  release_create:
+  deploy:
+    name: Deploy git tag
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # To make git commits made by semantic-release be made to our bot and not "github-actions" user which doesn't trigger other Action Workflows. 
+      # https://github.com/semantic-release/semantic-release/blob/2c30e268f9484adeb2b9d0bdf52c1cd909779d64/docs/recipes/ci-configurations/github-actions.md#pushing-packagejson-changes-to-a-master-branch
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Fetch Tags
-        run: git fetch --tags --force
-
-      - name: Get Latest Tag
-        id: get_latest_tag
-        run: |
-          # Get the latest tag that starts with "v"
-          latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
-          
-          # Get the latest tag that ends with "-stage"
-          latest_stage_tag=$(git tag --list '*-stage' | sort -V | tail -n 1)
-          
-          # If a "-stage" tag is found, use it for the new tag calculation
-          if [ -n "$latest_stage_tag" ]; then
-            echo "Latest '-stage' tag: $latest_stage_tag"
-            
-            # Extract the numeric part of the stage tag and increment it
-            stage_tag_number=${latest_stage_tag//[!0-9]/} # Remove non-numeric characters
-            new_stage_number=$((stage_tag_number + 1))
-            new_tag="v${new_stage_number}-stage"
-          
-          # If no "-stage" tag is found, increment the latest non-suffix tag
-          elif [ -n "$latest_tag" ]; then
-            echo "Latest non-suffix tag: $latest_tag"
-            
-            # Extract the numeric part of the tag and increment it
-            tag_number=${latest_tag//[!0-9]/} # Remove non-numeric characters
-            new_number=$((tag_number + 1))
-            new_tag="v$new_number-stage"
-          
-          # If no tag is found at all, set the initial version
-          else
-            new_tag="v1-stage"
-          fi
-        
-          echo "New tag: $new_tag"
-          echo "new_tag=$new_tag" >> $GITHUB_ENV
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
-          release_name: ${{ env.new_tag }}  # Title of the release
-          draft: false
-          prerelease: false
-
-
-####
+          persist-credentials: false # <----- makes `github-actions` user account no longer push my commits. 
+      - name: Deploy via semantic release 
+        uses: cycjimmy/semantic-release-action@v2
+        with: 
+          semantic_version: 18
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
