@@ -18,6 +18,7 @@ jobs:
       - name: Fetch Tags
         run: git fetch --tags 
 
+
       - name: Get Latest -stage Tag
         id: get_latest_tag
         run: |
