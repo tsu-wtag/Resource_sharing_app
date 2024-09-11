@@ -1,7 +1,7 @@
 # 
 
 
-name: Release Notes
+name: Create Release Tag
 
 on:
   push:
@@ -9,11 +9,9 @@ on:
       - master
 
 jobs:
-  add-release-to-github:
-    name: Add release to GitHub
+  create-release-tag:
+    name: Create Release Tag
     runs-on: ubuntu-latest
-    outputs:
-      actualVersion: ${{ steps.semantic_release_info.outputs.version }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -29,29 +27,10 @@ jobs:
           check-latest: true
 
       - name: Install Dependencies
-        run: npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/exec
+        run: npm install -g semantic-release @semantic-release/github
 
-      - name: Generate Version and GitHub Release
-        id: semantic_release_info
-        run: npx semantic-release --debug --verbose
+      - name: Generate Release Tag
+        id: create_release_tag
+        run: npx semantic-release --debug --no-ci
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-
-  create-release-tag:
-    name: Create Release Tag
-    runs-on: ubuntu-latest
-    needs: add-release-to-github
-    if: needs.add-release-to-github.outputs.actualVersion != ''
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Create Release Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          version=${{ needs.add-release-to-github.outputs.actualVersion }}
-          git tag -a "$version" -m "Release $version"
-          git push origin "$version"
