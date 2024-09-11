@@ -5,7 +5,6 @@ on:
     branches:
       - 'master'
 
-
 jobs:
   release_create:
     runs-on: ubuntu-latest
@@ -55,7 +54,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Correct reference for authentication
         with:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: ${{ env.new_tag }}  # Title of the release
