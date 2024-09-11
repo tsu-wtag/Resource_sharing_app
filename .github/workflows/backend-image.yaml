@@ -14,12 +14,20 @@ jobs:
       IMAGE_TAG: ${{ github.ref }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    #   - name: Checkout
+    #     uses: actions/checkout@v3
 
-      - name: 'gcr.io/cloud-builders/docker'
-        run: docker build -t gcr.io/nodal-algebra-161404/test ./backend/app
+    #   - name: 'gcr.io/cloud-builders/docker'
+    #     run: docker build -t gcr.io/nodal-algebra-161404/test ./backend/app
 
 
-      - name: Confirm Image Builds and Pushes
-        run: echo "All Docker images have been built and pushed successfully."
+    #   - name: Confirm Image Builds and Pushes
+    #     run: echo "All Docker images have been built and pushed successfully."
+      - name: Build Docker Image
+        uses: Miragon/docker-cloud-build@v1.0.1
+        with:
+          gcp-project-id: my-project-id
+          gcp-service-account-key: ${{ secrets.GCP_SA_KEY }}
+          image-name: my-image-name
+          image-sources: build/libs/*.jar,Dockerfile,some-other-file
+          github-token: ${{ secrets.GITHUB_TOKEN }}
