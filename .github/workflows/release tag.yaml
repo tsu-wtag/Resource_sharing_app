@@ -3,7 +3,7 @@ name: Staging Release Tag
 on:
   push:
     branches:
-      - 'develop'
+      - 'master'
       - 'OPS-2140-Docker-image-build'
 
 jobs:
