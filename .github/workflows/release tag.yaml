@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - 'OPS-2140-Docker-image-build'
 
 jobs:
   create-release:
@@ -49,3 +48,5 @@ jobs:
           release_name: ${{ env.new_tag }}-stage  # Title of the release
           draft: false
           prerelease: false
+
+##----dur hoi na
