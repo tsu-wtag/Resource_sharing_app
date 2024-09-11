@@ -33,4 +33,4 @@ jobs:
         id: create_release_tag
         run: npx semantic-release --debug --no-ci
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Provide the token here
