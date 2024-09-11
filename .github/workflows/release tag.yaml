@@ -1,35 +1,51 @@
-# 
+name: Staging Release Tag
 
-
-name: Release notes
 on:
-  workflow_call:
   push:
     branches:
-      - master
+      - 'develop'
+      - 'OPS-2140-Docker-image-build'
 
 jobs:
-  add-release-to-github:
-    name: Add release to GitHub
+  create-release:
+    name: Create Release for Tags
     runs-on: ubuntu-latest
-    outputs:
-      actualVersion: ${{ steps.semantic_release_info.outputs.version }}
+
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-          token: ${{ secrets.PAT_TOKEN }}
-      - name: Install Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          check-latest: true
-      - name: Install Dependency
-        run: npm i -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/exec
-      - name: Version and Github Release
-        id: semantic_release_info
-        run: npx semantic-release --debug --verbose
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch Tags
+        run: git fetch --tags 
+
+      - name: Get Latest -stage Tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "v102")
+            echo "Latest tag: $latest_tag"
+            
+            # Extract the tag number (remove the 'v' prefix)
+            tag_number=$(echo "$latest_tag" | sed 's/v//g')
+            
+            # Increment the tag number
+            new_tag_number=$((tag_number + 1))
+            
+            # Construct the new tag
+            new_tag="v$new_tag_number"
+            echo "New tag: $new_tag"
+            
+            # Create and push the new tag
+            git tag $new_tag
+            git push origin $new_tag
+            echo "new_tag=$new_tag" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+        with:
+          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+          release_name: ${{ env.new_tag }}-stage  # Title of the release
+          draft: false
+          prerelease: false
