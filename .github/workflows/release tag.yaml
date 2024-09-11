@@ -1,17 +1,19 @@
 # 
 
 
-name: Create Release Tag
-
+name: Release notes
 on:
+  workflow_call:
   push:
     branches:
       - master
 
 jobs:
-  create-release-tag:
-    name: Create Release Tag
+  add-release-to-github:
+    name: Add release to GitHub
     runs-on: ubuntu-latest
+    outputs:
+      actualVersion: ${{ steps.semantic_release_info.outputs.version }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -19,18 +21,15 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.PAT_TOKEN }}
-
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
           check-latest: true
-
-      - name: Install Dependencies
-        run: npm install -g semantic-release @semantic-release/github
-
-      - name: Generate Release Tag
-        id: create_release_tag
-        run: npx semantic-release --debug --no-ci
+      - name: Install Dependency
+        run: npm i -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/exec
+      - name: Version and Github Release
+        id: semantic_release_info
+        run: npx semantic-release --debug --verbose
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # Provide the token here
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
