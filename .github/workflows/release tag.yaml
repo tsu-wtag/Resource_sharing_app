@@ -4,55 +4,60 @@ on:
   push:
     branches:
       - 'master'
-      - 'OPS-2140-Docker-image-build'
 
-Jobs:
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Fetch Tags
-      run: git fetch --tags --force
-    - name: Get Latest Tag
-      id: get_latest_tag
-      run: |
-        # Get the latest tag that starts with "v"
-        latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
-        
-        # Get the latest tag that ends with "-stage"
-        latest_stage_tag=$(git tag --list '*-stage' | sort -V | tail -n 1)
-        
-        # If a "-stage" tag is found, use it for the new tag calculation
-        if [ -n "$latest_stage_tag" ]; then
-          echo "Latest '-stage' tag: $latest_stage_tag"
+
+jobs:
+  release_create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch Tags
+        run: git fetch --tags --force
+
+      - name: Get Latest Tag
+        id: get_latest_tag
+        run: |
+          # Get the latest tag that starts with "v"
+          latest_tag=$(git tag --list 'v*' | sort -V | tail -n 1)
           
-          # Extract the numeric part of the stage tag and increment it
-          stage_tag_number=${latest_stage_tag//[!0-9]/} # Remove non-numeric characters
-          new_stage_number=$((stage_tag_number + 1))
-          new_tag="v${new_stage_number}-stage"
-        
-        # If no "-stage" tag is found, increment the latest non-suffix tag
-        elif [ -n "$latest_tag" ]; then
-          echo "Latest non-suffix tag: $latest_tag"
+          # Get the latest tag that ends with "-stage"
+          latest_stage_tag=$(git tag --list '*-stage' | sort -V | tail -n 1)
           
-          # Extract the numeric part of the tag and increment it
-          tag_number=${latest_tag//[!0-9]/} # Remove non-numeric characters
-          new_number=$((tag_number + 1))
-          new_tag="v$new_number"
+          # If a "-stage" tag is found, use it for the new tag calculation
+          if [ -n "$latest_stage_tag" ]; then
+            echo "Latest '-stage' tag: $latest_stage_tag"
+            
+            # Extract the numeric part of the stage tag and increment it
+            stage_tag_number=${latest_stage_tag//[!0-9]/} # Remove non-numeric characters
+            new_stage_number=$((stage_tag_number + 1))
+            new_tag="v${new_stage_number}-stage"
+          
+          # If no "-stage" tag is found, increment the latest non-suffix tag
+          elif [ -n "$latest_tag" ]; then
+            echo "Latest non-suffix tag: $latest_tag"
+            
+            # Extract the numeric part of the tag and increment it
+            tag_number=${latest_tag//[!0-9]/} # Remove non-numeric characters
+            new_number=$((tag_number + 1))
+            new_tag="v$new_number-stage"
+          
+          # If no tag is found at all, set the initial version
+          else
+            new_tag="v1-stage"
+          fi
         
-        # If no tag is found at all, set the initial version
-        else
-          new_tag="v1"
-        fi
-      
-        echo "New tag: $new_tag"
-        echo "new_tag=$new_tag" >> $GITHUB_ENV
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
-      with:
-        tag_name: ${{ env.new_tag }}  # Use the new incremented tag
-        release_name: ${{ env.new_tag }}-stage  # Title of the release
-        draft: false
-        prerelease: false
+          echo "New tag: $new_tag"
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+        with:
+          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+          release_name: ${{ env.new_tag }}  # Title of the release
+          draft: false
+          prerelease: false
