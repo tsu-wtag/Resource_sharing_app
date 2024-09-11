@@ -1,28 +1,35 @@
 # 
 
 
-name: Deploy action 
+name: Release notes
 on:
+  workflow_call:
   push:
     branches:
-      - 'master'
-
+      - master
 
 jobs:
-  deploy:
-    name: Deploy git tag
+  add-release-to-github:
+    name: Add release to GitHub
     runs-on: ubuntu-latest
+    outputs:
+      actualVersion: ${{ steps.semantic_release_info.outputs.version }}
     steps:
-      # To make git commits made by semantic-release be made to our bot and not "github-actions" user which doesn't trigger other Action Workflows. 
-      # https://github.com/semantic-release/semantic-release/blob/2c30e268f9484adeb2b9d0bdf52c1cd909779d64/docs/recipes/ci-configurations/github-actions.md#pushing-packagejson-changes-to-a-master-branch
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout the repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          persist-credentials: false # <----- makes `github-actions` user account no longer push my commits. 
-      - name: Deploy via semantic release 
-        uses: cycjimmy/semantic-release-action@v2
-        with: 
-          semantic_version: 18
+          persist-credentials: false
+          token: ${{ secrets.PAT_TOKEN }}
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          check-latest: true
+      - name: Install Dependency
+        run: npm i -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/exec
+      - name: Version and Github Release
+        id: semantic_release_info
+        run: npx semantic-release --debug --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
