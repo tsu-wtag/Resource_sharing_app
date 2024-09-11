@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Fetch Tags
         run: git fetch --tags --force
@@ -54,7 +57,6 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          token: ${{ secrets.PAT_TOKEN }}  # Correctly use the PAT_TOKEN here
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: ${{ env.new_tag }}  # Title of the release
           draft: false
