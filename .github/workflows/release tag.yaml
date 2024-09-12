@@ -74,8 +74,9 @@ jobs:
       #     token: ${{ secrets.NEW_PAT_TOKEN }}
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1 
-        with:
+        uses: actions/create-release@v1
+        env:
           GITHUB_TOKEN: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
+        with:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: "${{ env.new_tag }}:${{ env.commit_message }}"  # Title of the release
