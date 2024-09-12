@@ -1,10 +1,9 @@
 name: Build Docker Image
 
 on:
-  release:
-    types: [published]
-    tags:
-        - '*'
+  push:
+    tags: [ 'v*' ]
+
 env:
   GKE_CLUSTER: staging-v3
   GKE_PROJECT: nodal-algebra-161404
