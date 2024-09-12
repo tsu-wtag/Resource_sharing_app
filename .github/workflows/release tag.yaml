@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
 
       - name: Fetch Tags
         run: git fetch --tags 
