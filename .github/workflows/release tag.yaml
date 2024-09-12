@@ -54,7 +54,7 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
       - name: Create Release
-        #if: startsWith(github.ref, 'refs/tags/')  # Ensure it only runs for tag pushes
+        if: startsWith(github.ref, 'refs/tags/')  # Ensure it only runs for tag pushes
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
