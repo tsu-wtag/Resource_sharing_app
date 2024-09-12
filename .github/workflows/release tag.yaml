@@ -62,3 +62,5 @@ jobs:
           bump-minor-pre-major: true
           bump-patch-for-minor-pre-major: true
           token: ${{ secrets.NEW_PAT_TOKEN }}
+          draft: false
+          prerelease: false
