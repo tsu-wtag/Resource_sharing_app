@@ -58,7 +58,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
-          name: ${{ env.new_tag }}  # Title of the release
+          name: ${{ env.new_tag }}-stage  # Title of the release
           token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
           draft: false
           prerelease: false
