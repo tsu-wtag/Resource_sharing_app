@@ -67,5 +67,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.ARA_TOKEN }}
-          event-type: build-image
+          event-type: staging
           client-payload: '{"tag_name": "${{ env.new_tag }}"}'
