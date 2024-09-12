@@ -1,7 +1,5 @@
 name: Build and Push Docker Images
 
-name: Build and Push to Registry
-
 on:
   repository_dispatch:
     types: [build-image]
