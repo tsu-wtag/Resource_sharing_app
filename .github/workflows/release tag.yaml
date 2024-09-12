@@ -5,7 +5,10 @@ on:
     branches:
       - 'master'
       - 'OPS-2140-Docker-image-build'
-
+permissions:
+  contents: write
+  pull-requests: write
+  
 jobs:
   create-release:
     name: Create Release for Tags
