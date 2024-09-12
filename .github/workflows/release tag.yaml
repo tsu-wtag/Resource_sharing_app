@@ -79,4 +79,4 @@ jobs:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: "${{ env.new_tag }}:${{ env.commit_message }}"  # Title of the release
         env:
-          GITHUB_TOKEN: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
+          GITHUB_TOKEN: ${{ secrets.ARA_TOKEN }}  # Token for authentication
