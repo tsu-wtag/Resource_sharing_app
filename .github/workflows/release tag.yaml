@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          repo-token: ${{ secrets.PAT }}
 
       - name: Fetch Tags
         run: git fetch --tags 
@@ -44,8 +42,9 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
+        env:
+          repo-token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
         with:
-          repo-token: ${{ secrets.PAT }}  # Token for authentication
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: ${{ env.new_tag }}-stage  # Title of the release
           draft: false
