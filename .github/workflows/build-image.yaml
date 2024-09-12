@@ -1,9 +1,8 @@
 name: Build Docker Image
 
 on:
-  push:
-    tags:
-      - '*'  # Trigger the workflow on tags that start with 'v'
+  repository_dispatch:
+    types: [build-image]
 
 env:
   GKE_CLUSTER: staging-v3
