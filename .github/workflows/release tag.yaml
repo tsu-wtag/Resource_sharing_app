@@ -63,3 +63,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ARA_TOKEN }}  # Token for authentication
 
+      # - name: Trigger Docker Image Build Workflow
+      #   uses: peter-evans/repository-dispatch@v3
+      #   with:
+      #     repository: ${{ github.repository }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     event-type: build-docker-images
+      #     client-payload: '{"tag_name": "${{ env.new_tag }}"}'
