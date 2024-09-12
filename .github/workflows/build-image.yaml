@@ -23,7 +23,7 @@ jobs:
 
       - name: Build and Push Backend Docker Image
         run: |
-          cd ./backend
+          cd ./backend/app
           docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/backend:${{ github.event.client_payload.tag_name }} .
 
       - name: Confirm Image Builds and Pushes
