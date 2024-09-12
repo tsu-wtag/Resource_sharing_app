@@ -47,7 +47,7 @@ jobs:
       #   # uses: actions/create-release@v1
       #   uses: softprops/action-gh-release@v1
       #   with:
-      #     name: ${{ env.new_tag }}-stage  # Title of the release
+      #     release_name: ${{ env.new_tag }}-stage  # Title of the release
       #     tag_name: ${{ env.new_tag }}  # Use the new incremented tag
       #     token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
       #     draft: false
@@ -64,3 +64,6 @@ jobs:
           token: ${{ secrets.NEW_PAT_TOKEN }}
           draft: false
           prerelease: false
+          
+      - name: Print Release Information
+        run: echo "Release Info: ${{ steps.release.outputs.release_created }}"
