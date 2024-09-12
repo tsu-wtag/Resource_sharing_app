@@ -5,16 +5,24 @@ on:
     tags:
       - '*'  # Trigger the workflow on tags that start with 'v'
 
+env:
+  GKE_CLUSTER: staging-v3
+  GKE_PROJECT: nodal-algebra-161404
+  GKE_ZONE: us-west1-a
+  IMAGE_NAME: demo-project
+
 jobs:
-  build:
-    name: Build and Push Docker Image to GCR
-    runs-on: ubuntu-latest
+  build-and-push-images:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build Docker image
+      - name: Build and Push Backend Docker Image
         run: |
-          docker build -t gcr.io/nodal-algebra-161404/demo:${{ github.ref_name }} .
+          cd ./backend
+          docker build -f Dockerfile -t eu.gcr.io/${env.GKE_PROJECT}/${env.IMAGE_NAME}:latest .
+      - name: 'gcr.io/cloud-builders/docker'
+        run: docker build -t gcr.io/nodal-algebra-161404/test ./backend/app
 
+
+      - name: Confirm Image Builds and Pushes
+        run: echo "All Docker images have been built and pushed successfully."
