@@ -5,8 +5,7 @@ on:
     branches:
       - 'master'
       - 'OPS-2140-Docker-image-build'
-    tags:
-      - '*'
+
 
 permissions:
   contents: write
@@ -61,7 +60,6 @@ jobs:
         with:
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           name: ${{ env.new_tag }}-stage  # Title of the release
-          #token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
-          token: ${{ secrets.GITHUB_TOKEN }}  # Token for authentication
+          token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
           draft: false
           prerelease: false
