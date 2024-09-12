@@ -1,10 +1,10 @@
 name: Build and Push Docker Images
 
 name: Build and Push to Registry
-  on:
-    push:
-      branches: [ master]
-      tags: [ 'v*' ]
+
+on:
+  repository_dispatch:
+    types: [build-image]
 
 permissions:
   contents: write
