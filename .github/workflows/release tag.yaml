@@ -70,5 +70,5 @@ jobs:
         with:
           release-type: simple
           package-name: release
-          name: ${{ env.new_tag }}-stage
+          name: ${{ env.new_tag }}-OMG
           token: ${{ secrets.NEW_PAT_TOKEN }}
