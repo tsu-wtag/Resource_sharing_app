@@ -42,9 +42,8 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        env:
-          repo-token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
         with:
+          token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
           tag_name: ${{ env.new_tag }}  # Use the new incremented tag
           release_name: ${{ env.new_tag }}-stage  # Title of the release
           draft: false
