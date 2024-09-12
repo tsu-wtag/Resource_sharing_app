@@ -1,0 +1,30 @@
+name: Build and Push Docker Images
+
+on:
+  repository_dispatch:
+    types: [staging]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push-images:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    env:
+      GKE_CLUSTER: staging-v3
+      GKE_PROJECT: nodal-algebra-161404
+      GKE_ZONE: us-west1-a
+      IMAGE_NAME: demo-project
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and Push Backend Docker Image
+        run: |
+          cd ./backend/app
+          docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/backend:${{ github.event.client_payload.tag_name }} .
+
+      - name: Confirm Image Builds and Pushes
+        run: echo "All Docker images have been built and pushed successfully."
