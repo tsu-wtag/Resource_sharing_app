@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  
+
 jobs:
   create-release:
     name: Create Release for Tags
@@ -42,13 +42,23 @@ jobs:
             git push origin $new_tag
             echo "new_tag=$new_tag" >> $GITHUB_ENV
 
-      - name: Create Release
-        # id: create_release
-        # uses: actions/create-release@v1
-        uses: softprops/action-gh-release@v1
+      # - name: Create Release
+      #   # id: create_release
+      #   # uses: actions/create-release@v1
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     name: ${{ env.new_tag }}-stage  # Title of the release
+      #     tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+      #     token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
+      #     draft: false
+      #     prerelease: false
+
+      - name: release-please
+        id: release
+        uses: google-github-actions/release-please-action@v3
         with:
-          name: ${{ env.new_tag }}-stage  # Title of the release
-          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
-          token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
-          draft: false
-          prerelease: false
+          release-type: simple
+          package-name: release
+          bump-minor-pre-major: true
+          bump-patch-for-minor-pre-major: true
+          token: ${{ secrets.NEW_PAT_TOKEN }}
