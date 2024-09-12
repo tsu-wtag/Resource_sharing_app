@@ -64,11 +64,18 @@ jobs:
       #     draft: false
       #     prerelease: false
 
+      # - name: Create Release
+      #   id: release
+      #   uses: google-github-actions/release-please-action@v3
+      #   with:
+      #     release-type: simple
+      #     package-name: release
+      #     name: ${{ env.new_tag }}
+      #     token: ${{ secrets.NEW_PAT_TOKEN }}
       - name: Create Release
-        id: release
-        uses: google-github-actions/release-please-action@v3
+        id: create_release
+        uses: actions/create-release@v1 
         with:
-          release-type: simple
-          package-name: release
-          name: ${{ env.new_tag }}-OMG
-          token: ${{ secrets.NEW_PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
+          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+          release_name: "${{ env.new_tag }}:${{ env.commit_message }}"  # Title of the release
