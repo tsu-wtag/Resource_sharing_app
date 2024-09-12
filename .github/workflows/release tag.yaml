@@ -64,6 +64,6 @@ jobs:
           token: ${{ secrets.NEW_PAT_TOKEN }}
           draft: false
           prerelease: false
-          
-      - name: Print Release Information
-        run: echo "Release Info: ${{ steps.release.outputs.release_created }}"
+
+      - name: Print New Tag
+        run: echo "New Tag: ${{ env.new_tag }}"
