@@ -3,7 +3,7 @@ name: Build Docker Image
 on:
   push:
     tags:
-      - 'v*'  # Trigger the workflow on tags that start with 'v'
+      - '*'  # Trigger the workflow on tags that start with 'v'
 
 jobs:
   build:
