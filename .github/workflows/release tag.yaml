@@ -54,12 +54,20 @@ jobs:
           # Set the new tag in the environment
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
+      # - name: Create Release
+      #   if: startsWith(github.ref, 'refs/tags/')  # Ensure it only runs for tag pushes
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: ${{ env.new_tag }}  # Use the new incremented tag
+      #     name: ${{ env.new_tag }}-stage  # Title of the release
+      #     token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
+      #     draft: false
+      #     prerelease: false
+
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')  # Ensure it only runs for tag pushes
-        uses: softprops/action-gh-release@v1
+        id: release
+        uses: google-github-actions/release-please-action@v3
         with:
-          tag_name: ${{ env.new_tag }}  # Use the new incremented tag
-          name: ${{ env.new_tag }}-stage  # Title of the release
-          token: ${{ secrets.NEW_PAT_TOKEN }}  # Token for authentication
-          draft: false
-          prerelease: false
+          release-type: simple
+          package-name: release
+          token: ${{ secrets.NEW_PAT_TOKEN }}
