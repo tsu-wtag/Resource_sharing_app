@@ -2,7 +2,7 @@ name: Build Docker Image
 
 on:
   push:
-    tags: [ 'v*' ]
+    tags: [ '*' ]
 
 env:
   GKE_CLUSTER: staging-v3
