@@ -1,9 +1,13 @@
 name: Build and Push Docker Images
 
-on:
-  repository_dispatch:
-    types: [staging]
+# on:
+#   repository_dispatch:
+#     types: [staging]
 
+on:
+  release:
+    types: [published]
+    
 permissions:
   contents: write
 
