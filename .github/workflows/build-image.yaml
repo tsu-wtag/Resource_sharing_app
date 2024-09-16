@@ -7,7 +7,7 @@ name: Build and Push Docker Images
 on:
   release:
     types: [published]
-    
+
 permissions:
   contents: write
 
@@ -28,7 +28,7 @@ jobs:
       - name: Build and Push Backend Docker Image
         run: |
           cd ./backend/app
-          docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/backend:${{ github.event.client_payload.tag_name }} .
+          docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/backend:${{ github.event.release.tag_name }} .
 
       - name: Confirm Image Builds and Pushes
         run: echo "All Docker images have been built and pushed successfully."
