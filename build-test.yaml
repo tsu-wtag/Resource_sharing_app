@@ -11,11 +11,6 @@ jobs:
   build-and-push-images:
     name: Build and Push Docker Images
     runs-on: ubuntu-latest
-    env:
-      GKE_CLUSTER: staging-v3
-      GKE_PROJECT: nodal-algebra-161404
-      GKE_ZONE: us-west1-a
-      IMAGE_NAME: demo-project
 
     steps:
       - name: Checkout code
