@@ -1,0 +1,34 @@
+name: Build and Push Docker Images
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push-images:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [backend, backend, backend]
+    env:
+      GKE_CLUSTER: staging-v3
+      GKE_PROJECT: nodal-algebra-161404
+      GKE_ZONE: us-west1-a
+      IMAGE_NAME: demo-project
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and Push ${{ matrix.service }} Docker Image
+        run: |
+          cd ./${{ matrix.service }}/app
+          docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/${{ matrix.service }}:${{ github.event.release.tag_name }} .
+          docker push eu.gcr.io/${{ env.GKE_PROJECT }}/${{ matrix.service }}:${{ github.event.release.tag_name }}
+
+      - name: Confirm ${{ matrix.service }} Image Build and Push
+        run: echo "${{ matrix.service }} Docker image has been built and pushed successfully."
