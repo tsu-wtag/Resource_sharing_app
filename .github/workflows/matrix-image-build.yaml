@@ -28,7 +28,7 @@ jobs:
         run: |
           cd ./${{ matrix.service }}/app
           docker build -f Dockerfile -t eu.gcr.io/${{ env.GKE_PROJECT }}/${{ matrix.service }}:${{ github.event.release.tag_name }} .
-          docker push eu.gcr.io/${{ env.GKE_PROJECT }}/${{ matrix.service }}:${{ github.event.release.tag_name }}
+          # docker push eu.gcr.io/${{ env.GKE_PROJECT }}/${{ matrix.service }}:${{ github.event.release.tag_name }}
 
       - name: Confirm ${{ matrix.service }} Image Build and Push
         run: echo "${{ matrix.service }} Docker image has been built and pushed successfully."
